@@ -45,6 +45,8 @@ exports.addProduct = async (req, res) => {
     //     .toFile(path.resolve(req.file.destination, "products", image));
     // fs.unlinkSync(req.file.path);
 
+    console.log("Image Object", req.file);
+
     const fileObj = await cloudinary.uploader.upload(
         req.file.path,
         {

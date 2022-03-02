@@ -12,6 +12,9 @@ jwt-token-authentication-node-js-example-flow.png
 # ignore jmeter log
 jmeter.log
 
+# ignore the envinorment file
+.env
+
 #ignore .DS_Store file from mac
 .DS_Store
 

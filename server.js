@@ -2,9 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const dbConfig = require("./app/config/db.config");
+const { debug, prod } = require("./app/config/db.config");
 
 const app = express();
+
+let connection = null;
 
 var corsOptions = {
     origin: "http://localhost:8081",
@@ -26,8 +28,12 @@ app.use("/app/uploads", express.static("uploads"));
 const db = require("./app/models");
 const Role = db.role;
 
-//const connection = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
-const connection = `mongodb+srv://chaahiyo-user:JqyQilNBm7acr7o4@cluster0.s5jem.mongodb.net/chaahiyo_db?retryWrites=true&w=majority`;
+if (process.env.APP_ENV === "debug") {
+    connection = `mongodb://${debug.HOST}:${debug.PORT}/${debug.DB}`;
+} else {
+    connection = `mongodb+srv://${prod.HOST}/${prod.DB}?retryWrites=true&w=majority`;
+}
+
 db.mongoose
     .connect(connection, {
         useNewUrlParser: true,
