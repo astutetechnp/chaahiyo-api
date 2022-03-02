@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -25,8 +26,8 @@ app.use("/app/uploads", express.static("uploads"));
 const db = require("./app/models");
 const Role = db.role;
 
-// const connection = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
-const connection = `mongodb+srv://chaahiyo-user:JqyQilNBm7acr7o4@cluster0.s5jem.mongodb.net/chaahiyo_db?retryWrites=true&w=majority`;
+const connection = `mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`;
+//const connection = `mongodb+srv://chaahiyo-user:JqyQilNBm7acr7o4@cluster0.s5jem.mongodb.net/chaahiyo_db?retryWrites=true&w=majority`;
 db.mongoose
     .connect(connection, {
         useNewUrlParser: true,

@@ -5,10 +5,15 @@ var ObjectId = require("mongodb").ObjectID;
 const db = require("../models");
 const Products = db.products;
 const Categories = db.categories;
-
-const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
+const { v2: cloudinary } = require("cloudinary");
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 exports.uploadImage = async (req, res, next) => {
     const { filename: image } = req.file;
@@ -32,18 +37,32 @@ exports.uploadImages = async (req, res) => {
 };
 
 exports.addProduct = async (req, res) => {
-    const { filename: image } = req.file;
+    // const { filename: image } = req.file;
 
-    await sharp(req.file.path)
-        .resize({ height: 400 })
-        .jpeg({ quality: 90 })
-        .toFile(path.resolve(req.file.destination, "products", image));
-    fs.unlinkSync(req.file.path);
+    // await sharp(req.file.path)
+    //     .resize({ height: 400 })
+    //     .jpeg({ quality: 90 })
+    //     .toFile(path.resolve(req.file.destination, "products", image));
+    // fs.unlinkSync(req.file.path);
 
+    const fileObj = await cloudinary.uploader.upload(
+        req.file.path,
+        {
+            height: 300,
+            crop: "scale",
+            format: "jpg",
+        },
+        function (error, result) {
+            if (error) {
+                res.status(500).json({ message: "Cloudinary error :", error });
+                return;
+            }
+        }
+    );
     const product = new Products({
         user_id: req.body.user_id,
         name: req.body.name,
-        image_url: image,
+        image_url: fileObj.url,
         price: req.body.price,
         desc: req.body.desc,
         city: req.body.city,
