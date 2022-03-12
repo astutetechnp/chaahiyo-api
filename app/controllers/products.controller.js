@@ -180,3 +180,36 @@ exports.getLatestProducts = (req, res) => {
             res.json(products);
         });
 };
+
+exports.updateProductViews = (req, res) => {
+    const product_id = req.query.product_id;
+    Products.updateOne(
+        { _id: new ObjectId(product_id) },
+        { $inc: { views: 1 } }
+    ).exec((err, product) => {
+        if (err) {
+            res.status(500).json({ message: err });
+        }
+        res.json({
+            message: "Product views updated successfully",
+        });
+    });
+};
+
+exports.searchProduct = (req, res) => {
+    const keyword = req.query.keyword;
+
+    Products.find({
+        $or: [
+            { name: new RegExp(keyword, "i") },
+            { desc: new RegExp(keyword, "i") },
+        ],
+    })
+        .populate("category", "name")
+        .exec((err, products) => {
+            if (err) {
+                res.status(500).json({ message: err });
+            }
+            res.json(products);
+        });
+};

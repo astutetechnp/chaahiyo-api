@@ -1,4 +1,5 @@
-const { authJwt } = require("../middlewares");
+const { authJwt, firebaseAuth } = require("../middlewares");
+
 const {
     uploadSingle,
     uploadImages,
@@ -17,10 +18,18 @@ module.exports = function (app) {
     });
 
     app.get("/api/getProducts", controller.getProducts);
-    app.get("/api/getExpiringProducts", controller.getExpiringProducts);
+    app.get(
+        "/api/getExpiringProducts",
+        firebaseAuth,
+        controller.getExpiringProducts
+    );
     app.get("/api/getLatestProducts", controller.getLatestProducts);
     app.get("/api/getProductsByCategory", controller.getProductsByCategory);
-    app.post("/api/addProduct", uploadSingle, controller.addProduct);
+    app.post(
+        "/api/addProduct",
+        [firebaseAuth, uploadSingle],
+        controller.addProduct
+    );
     app.post("/api/getProductsNearBy", controller.getProductsNearBy);
     app.post("/api/uploadImage", uploadSingle, controller.uploadImage);
     app.post(
@@ -29,4 +38,7 @@ module.exports = function (app) {
         resizeImages,
         controller.uploadImages
     );
+
+    app.put("/api/updateProductViews", controller.updateProductViews);
+    app.get("/api/searchProduct", controller.searchProduct);
 };
