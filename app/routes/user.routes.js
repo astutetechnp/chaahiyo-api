@@ -1,4 +1,4 @@
-const { authJwt } = require("../middlewares");
+const { authJwt, firebaseAuth } = require("../middlewares");
 const controller = require("../controllers/user.controller");
 
 module.exports = function (app) {
@@ -35,5 +35,9 @@ module.exports = function (app) {
 
     app.get("/api/test/dashboard", [authJwt.verifyToken], controller.dashboard);
 
-    app.post("/api/sendNotification", controller.sendNotification);
+    app.post(
+        "/api/sendNotification",
+        firebaseAuth,
+        controller.sendNotification
+    );
 };
