@@ -34,4 +34,6 @@ module.exports = function (app) {
     );
 
     app.get("/api/test/dashboard", [authJwt.verifyToken], controller.dashboard);
+
+    app.post("/api/sendNotification", controller.sendNotification);
 };

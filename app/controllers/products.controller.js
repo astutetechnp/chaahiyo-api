@@ -109,13 +109,13 @@ exports.getProductsNearBy = (req, res) => {
                     near: {
                         type: "Point",
                         coordinates: [
-                            parseFloat(req.body.lat),
                             parseFloat(req.body.lng),
+                            parseFloat(req.body.lat),
                         ],
                     },
                     distanceField: "distance",
-                    distanceMultiplier: 1 / 6371,
-                    maxDistance: 2000,
+                    distanceMultiplier: 6371,
+                    //maxDistance: 3000 / 6378137,
                     spherical: true,
                 },
             },
