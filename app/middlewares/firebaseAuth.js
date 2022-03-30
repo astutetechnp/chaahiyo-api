@@ -1,7 +1,7 @@
-const admin = require("firebase-admin");
+const firebaseAdmin = require("firebase-admin");
 
-admin.initializeApp({
-    credential: admin.credential.cert({
+firebaseAdmin.initializeApp({
+    credential: firebaseAdmin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         private_key: process.env.FIREBASE_PRIVATE_KEY
             ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
@@ -16,7 +16,7 @@ const isFirebaseAuthorized = (req, res, next) => {
     console.log(req.headers);
     // if (authorized) {
     if (req.headers.authtoken) {
-        admin
+        firebaseAdmin
             .auth()
             .verifyIdToken(req.headers.authtoken)
             .then((decodedToken) => {
@@ -34,4 +34,9 @@ const isFirebaseAuthorized = (req, res, next) => {
     }
 };
 
-module.exports = isFirebaseAuthorized;
+const firebase = {
+    isFirebaseAuthorized,
+    firebaseAdmin,
+};
+
+module.exports = firebase;

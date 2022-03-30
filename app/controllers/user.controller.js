@@ -3,8 +3,7 @@ const config = require("../config/auth.config");
 const db = require("../models");
 const User = db.user;
 const Role = db.role;
-
-const admin = require("firebase-admin");
+const { firebase } = require("../middlewares");
 
 exports.sliders = (req, res) => {
     res.json([
@@ -61,43 +60,6 @@ exports.dashboard = (req, res) => {
     res.status(200).send("User Profile");
 };
 
-// exports.sendNotification = (req, res) => {
-//     const message = req.body.message;
-//     const from = req.body.from;
-//     const to = req.body.deviceToken;
-
-//     console.log("=> Message from App : ", message);
-//     console.log("=> Device Token :", to);
-//     console.log("=> From user :", from);
-
-//     var options = {
-//         priority: "high",
-//     };
-
-//     const payload = {
-//         notification: {
-//             title: req.from + " sent a message",
-//             body: req.message,
-//             icon: "default",
-//             sound: "default",
-//             vibrate: "true",
-//             android_channel_id: "1",
-//         },
-//     };
-
-//     admin
-//         .messaging()
-//         .sendToDevice(to, payload, options)
-//         .then((response) => {
-//             console.log("Successfully sent message: ", response);
-//             return true;
-//         })
-//         .catch((error) => {
-//             console.log("Error sending message: ", error);
-//             return false;
-//         });
-// };
-
 exports.sendNotification = (req, res) => {
     console.log("Notification body", req.body);
     const notification_options = {
@@ -124,7 +86,7 @@ exports.sendNotification = (req, res) => {
     console.log("=> Message : ", message);
     console.log("=> Device Token :", toToken);
 
-    admin
+    firebase.firebaseAdmin
         .messaging()
         .sendToDevice(toToken, payload, options)
         .then((response) => {
