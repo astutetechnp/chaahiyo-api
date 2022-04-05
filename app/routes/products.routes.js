@@ -18,11 +18,7 @@ module.exports = function (app) {
     });
 
     app.get("/api/getProducts", controller.getProducts);
-    app.get(
-        "/api/getExpiringProducts",
-        firebase.isFirebaseAuthorized,
-        controller.getExpiringProducts
-    );
+    app.get("/api/getExpiringProducts", controller.getExpiringProducts);
     app.get("/api/getLatestProducts", controller.getLatestProducts);
     app.get("/api/getProductsByCategory", controller.getProductsByCategory);
     app.post(

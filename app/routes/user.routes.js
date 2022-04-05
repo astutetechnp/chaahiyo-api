@@ -40,4 +40,10 @@ module.exports = function (app) {
         firebase.isFirebaseAuthorized,
         controller.sendNotification
     );
+
+    app.post(
+        "/api/sendNotificationToTopic",
+        firebase.isFirebaseAuthorized,
+        controller.sendNotificationToTopic
+    );
 };

@@ -97,6 +97,36 @@ exports.sendNotification = (req, res) => {
         });
 };
 
+exports.sendNotificationToTopic = (req, res) => {
+    const notification_options = {
+        priority: "high",
+        timeToLive: 60 * 60 * 24,
+    };
+
+    const from = req.body.from;
+    const topic = req.body.topic;
+    const message = req.body.message;
+    const options = notification_options;
+
+    const payload = {
+        notification: {
+            title: from + " sent you a message",
+            body: message,
+        },
+        topic: topic,
+    };
+
+    firebase.firebaseAdmin
+        .messaging()
+        .send(payload)
+        .then((response) => {
+            res.status(200).json({ message: "Notification sent successfully" });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+};
+
 exports.addCreditToUser = (req, res) => {
     const userId = context.auth.uid;
     const creditToAdd = data.credit;
